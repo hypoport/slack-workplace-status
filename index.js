@@ -35,7 +35,7 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 controller.on('slash_command', function (slashCommand, message) {
 
   console.log("received", JSON.stringify(message));
-  
+
   if (message.token !== VERIFY_TOKEN) {
     return slashCommand.res.send(401, 'Unauthorized')
   }
@@ -53,6 +53,8 @@ controller.on('slash_command', function (slashCommand, message) {
       switch (message.text) {
         case "krank":
           slashCommand.replyPublic(message, "gute Besserung");
+        default:
+          slashCommand.replyPublic(message, "ich versteh dich nicht")
       }
 
       break;

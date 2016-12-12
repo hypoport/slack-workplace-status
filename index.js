@@ -43,6 +43,7 @@ var TOKEN = process.env.SLACK_TOKEN
 // Slack slash command verify token
 var VERIFY_TOKEN = process.env.SLACK_VERIFY_TOKEN
 
+console.log(process.env)
 console.log("token: "+ TOKEN)
 console.log("verify token: "+VERIFY_TOKEN)
 var controller = botkit.slackbot()

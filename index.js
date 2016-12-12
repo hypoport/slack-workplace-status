@@ -39,7 +39,7 @@ controller.on("slash_command", function (slashCommand, message) {
   console.log("received", JSON.stringify(message));
 
   if (message.token !== VERIFY_TOKEN) {
-    return slashCommand.res.send(401, "Unauthorized")
+    return slashCommand.res.send(401, "Unauthorized, please specify the correct verification token!")
   }
 
   switch (message.command) {

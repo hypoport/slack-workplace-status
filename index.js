@@ -56,23 +56,33 @@ controller.on("slash_command", function (slashCommand, message) {
 
       var date = parseDate(message.text);
 
-      switch (getStatus(message.text)) {
-        case "krank":
-          slashCommand.replyPublic(message, "du bist krank am " + date);
+      var command = getStatus(message.text)
+      switch (true) {
+        case (/^sick$/).test(command):
+          slashCommand.replyPublic(message, "I'm sorry to hear that you are sick on " + date);
           break;
-        case "homeoffice":
-          slashCommand.replyPublic(message, "du machst homeoffice am " + date);
+        case (/^(vacation|vacay|vaca|vac)$/).test(command):
+          slashCommand.replyPublic(message, "You deserved your vacation on " + date);
           break;
-        case "urlaub":
-          slashCommand.replyPublic(message, "du hast urlaub am " + date);
+        case (/^(off|offline)$/).test(command):
+          slashCommand.replyPublic(message, "offline on " + date);
+          break;
+        case (/^(homeoffice|ho|home)$/).test(command):
+          slashCommand.replyPublic(message, "You're working from home on " + date);
+          break;
+        case (/^(remote|rem|rmt)$/).test(command):
+          slashCommand.replyPublic(message, "You're working remote on " + date);
+          break;
+        case (/^(workoffice|office|work|wo)$/).test(command):
+          slashCommand.replyPublic(message, "You're at work on " + date);
           break;
         default:
-          slashCommand.replyPublic(message, "ich versteh dich nicht")
+          slashCommand.replyPublic(message, "Sorry, I couldn't understand that. Try /wps only to get help.")
       }
 
       break;
     default:
-      slashCommand.replyPublic(message, "ich versteh das Kommando " + message.command + " nicht.");
+      slashCommand.replyPublic(message, "Ooops. That command '" + message.command + "' is unexpected.");
 
   }
 

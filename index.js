@@ -51,8 +51,7 @@ var controller = Botkit.slackbot(config).configureSlackApp(
     }
 );
 
-//controller.setupWebserver(process.env.PORT, function (err, webserver) {
-controller.setupWebserver("8080", function (err, webserver) {
+controller.setupWebserver(process.env.PORT, function (err, webserver) {
     controller.createWebhookEndpoints(controller.webserver);
 
     //controller.createOauthEndpoints(controller.webserver, function (err, req, res) {

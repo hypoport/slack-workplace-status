@@ -77,12 +77,12 @@ controller.on("slash_command", function (slashCommand, message) {
 });
 
 function getStatus(text) {
-  var groups = text.match(/^(\w*) (\w*)$/);
+  var groups = text.match(/^(\w*) (.*)$/);
   return groups[1];
 }
 
 function parseDate(text) {
-  var groups = text.match(/^(\w*) (\w*)$/);
+  var groups = text.match(/^(\w*) (.*)$/);
   var date = sugar.Date.create(groups[2]);
   // console.log(new sugar.Date().format("dd.mm"));
   return date;

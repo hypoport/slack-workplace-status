@@ -87,7 +87,7 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 controller.on('slash_command', function (slashCommand, message) {
 
     if (message.token !== VERIFY_TOKEN) {
-        return slashCommand.res.send(401, 'Unauthorized')
+        return slashCommand.res.send(401, 'Unauthorized with token: ' + VERIFY_TOKEN)
     }
 
     switch (message.command) {

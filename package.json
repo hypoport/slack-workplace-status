@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "debug": "node $NODE_DEBUG_OPTION index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/hypoport/slack-workplace-status#readme",
   "dependencies": {
-    "botkit": "^0.4.3"
+    "botkit": "^0.4.3",
+    "sugar": "^2.0.4",
+    "sugar-date": "^2.0.4"
   }
 }

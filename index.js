@@ -1,7 +1,9 @@
-var botkit = require('botkit');
+var botkit = require("botkit");
+var date = require("sugar-date");
+var sugar = require("sugar");
 
 if (!process.env.SLACK_TOKEN || !process.env.PORT || !process.env.SLACK_VERIFY_TOKEN) {
-  console.log('Error: Specify SLACK_TOKEN, SLACK_VERIFY_TOKEN and PORT in environment');
+  console.log("Error: Specify SLACK_TOKEN, SLACK_VERIFY_TOKEN and PORT in environment");
   process.exit(1);
 }
 
@@ -32,12 +34,12 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
   controller.createWebhookEndpoints(controller.webserver);
 });
 
-controller.on('slash_command', function (slashCommand, message) {
+controller.on("slash_command", function (slashCommand, message) {
 
   console.log("received", JSON.stringify(message));
 
   if (message.token !== VERIFY_TOKEN) {
-    return slashCommand.res.send(401, 'Unauthorized')
+    return slashCommand.res.send(401, "Unauthorized")
   }
 
   switch (message.command) {
@@ -50,25 +52,39 @@ controller.on('slash_command', function (slashCommand, message) {
         return;
       }
 
-      switch (message.text) {
+      var date = parseDate(message.text);
+
+      switch (getStatus(message.text)) {
         case "krank":
-          slashCommand.replyPublic(message, "gute Besserung");
+          slashCommand.replyPublic(message, "du bist krank am " + date);
+          break;
+        case "homeoffice":
+          slashCommand.replyPublic(message, "du machst homeoffice am " + date);
+          break;
+        case "urlaub":
+          slashCommand.replyPublic(message, "du hast urlaub am " + date);
+          break;
         default:
           slashCommand.replyPublic(message, "ich versteh dich nicht")
       }
 
       break;
     default:
-      slashCommand.replyPublic(message, "I'm afraid I don't know how to " + message.command + " yet.");
+      slashCommand.replyPublic(message, "ich versteh das Kommando " + message.command + " nicht.");
 
   }
 
 });
 
-// app.get('/', function (req, res) {
-//   res.send('Hello World!');
-// });
+function getStatus(text) {
+  var groups = text.match(/^(\w*) (\w*)$/);
+  return groups[1];
+}
 
-// app.listen(process.env.PORT, function () {
-//   console.log('Example app listening on port '+process.env.PORT);
-// });
+function parseDate(text) {
+  var groups = text.match(/^(\w*) (\w*)$/);
+  var date = sugar.Date.create(groups[2]);
+  // console.log(new sugar.Date().format("dd.mm"));
+  return date;
+}
+

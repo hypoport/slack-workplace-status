@@ -55,13 +55,13 @@ var controller = Botkit.slackbot(config).configureSlackApp(
 controller.setupWebserver(process.env.PORT, function (err, webserver) {
     controller.createWebhookEndpoints(controller.webserver);
 
-    controller.createOauthEndpoints(controller.webserver, function (err, req, res) {
-        if (err) {
-            res.status(500).send('ERROR: ' + err);
-        } else {
-            res.send('Success!');
-        }
-    });
+    //controller.createOauthEndpoints(controller.webserver, function (err, req, res) {
+    //    if (err) {
+    //        res.status(500).send('ERROR: ' + err);
+    //    } else {
+    //        res.send('Success!');
+    //    }
+    //});
 });
 
 
@@ -72,11 +72,7 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 controller.on('slash_command', function (slashCommand, message) {
 
     switch (message.command) {
-        case "/echo": //handle the `/echo` slash command. We might have others assigned to this app too!
-            // The rules are simple: If there is no text following the command, treat it as though they had requested "help"
-            // Otherwise just echo back to them what they sent us.
-
-            // but first, let's make sure the token matches!
+        case "/wps": 
             if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
 
             // if no text was supplied, treat it as a help command

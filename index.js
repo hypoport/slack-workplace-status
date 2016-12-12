@@ -26,7 +26,7 @@
 // var express = require('express');
 // var app = express();
 
-var Botkit = require('botkit');
+var botkit = require('botkit');
 
 if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT || !process.env.VERIFICATION_TOKEN) {
     console.log('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
@@ -34,35 +34,49 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT ||
 }
 
 var config = {}
-/*if (process.env.MONGOLAB_URI) {
-    var BotkitStorage = require('botkit-storage-mongo');
-    config = {
-        storage: BotkitStorage({mongoUri: process.env.MONGOLAB_URI}),
-    };
-} else {
-    config = {
-        json_file_store: './db_slackbutton_slash_command/',
-    };
-}*/
 
-var controller = Botkit.slackbot(config).configureSlackApp(
-    {
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        scopes: ['commands'],
+
+// Beep Boop specifies the port you should listen on default to 8080 for local dev
+var PORT = process.env.PORT || 8080
+// Single team Slack token
+var TOKEN = process.env.SLACK_TOKEN
+// Slack slash command verify token
+var VERIFY_TOKEN = process.env.SLACK_VERIFY_TOKEN
+
+var controller = botkit.slackbot()
+var bot = controller.spawn({ token: TOKEN }).startRTM()
+
+// fetch and store team information
+bot.api.team.info({}, function (err, res) {
+  if (err) {
+    return console.error(err)
+  }
+
+  controller.storage.teams.save({id: res.team.id}, (err) => {
+    if (err) {
+      console.error(err)
     }
-);
+  })
+})
+
+// var controller = Botkit.slackbot(config).configureSlackApp(
+//     {
+//         clientId: process.env.CLIENT_ID,
+//         clientSecret: process.env.CLIENT_SECRET,
+//         scopes: ['commands'],
+//     }
+// );
 
 controller.setupWebserver(process.env.PORT, function (err, webserver) {
     controller.createWebhookEndpoints(controller.webserver);
 
-    controller.createOauthEndpoints(controller.webserver, function (err, req, res) {
-       if (err) {
-           res.status(500).send('ERROR: ' + err);
-       } else {
-           res.send('Success!');
-       }
-    });
+    // controller.createOauthEndpoints(controller.webserver, function (err, req, res) {
+    //    if (err) {
+    //        res.status(500).send('ERROR: ' + err);
+    //    } else {
+    //        res.send('Success!');
+    //    }
+    // });
 });
 
 
@@ -72,9 +86,12 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 
 controller.on('slash_command', function (slashCommand, message) {
 
+    if (message.token !== VERIFY_TOKEN) {
+        return slashCommand.res.send(401, 'Unauthorized')
+    }
+
     switch (message.command) {
-        case "/wps": 
-            if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
+        case "/wps":            
 
             // if no text was supplied, treat it as a help command
             if (message.text === "" || message.text === "help") {

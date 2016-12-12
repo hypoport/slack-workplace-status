@@ -48,7 +48,9 @@ controller.on("slash_command", function (slashCommand, message) {
       // if no text was supplied, treat it as a help command
       if (message.text === "" || message.text === "help") {
         slashCommand.replyPrivate(message,
-          "status ...");
+          "/wps helps you manage your workplace status of your teammates\n" +
+          "/wps status date - sets your wps to state on date\n" +
+          "you can enter dates in natural language. Here you can find some samples: https://sugarjs.com/docs/#/DateParsing");
         return;
       }
 

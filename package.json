@@ -1,0 +1,22 @@
+{
+  "name": "slack-workplace-status",
+  "version": "1.0.0",
+  "description": "Set and view your workplace status in Slack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypoport/slack-workplace-status.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hypoport/slack-workplace-status/issues"
+  },
+  "homepage": "https://github.com/hypoport/slack-workplace-status#readme",
+  "dependencies": {
+    "botkit": "^0.4.3"
+  }
+}
